@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="David Escutia de Haro">
+    <meta name="author" content="Dvix">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="favicon" href="assets/">
+    <link rel="stylesheet" href="main.css">
+    <title>Calculadora Minimo Comun Multiplo</title>
+</head>
+
+<body>
+    <div class="contenedor">
+        <h1>CALCULADORA MCM</h1>
+        <form class="tapiz" action="mcm.php" method="post">
+            <div class="row">
+                <label>Valores</label>
+                <input type="range" name="slider" id="slider" min="2" max="10" value="2" required>
+            </div>
+            <div class="form_container">
+                <div class="row">
+                    <label>Nº 1:</label>
+                    <input type="text" name="num[]" maxlength="6" placeholder="Introduzca un numero" required>
+                </div>
+                <div class="row">
+                    <label>Nº 2:</label>
+                    <input type="text" name="num[]" maxlength="6" placeholder="Introduzca un numero" required>
+                </div>
+            </div>
+            <div class="btn-row">
+                <button id="btn-submit" type="button" onclick="verificar()">Calcular</button>
+                <button type="reset">Reset</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Funcion JS que verifica que los valores introducidos sean los esperados y validos para su uso
+        function verificar() {
+            let contenedor = document.querySelector('.tapiz');
+            let inputs = document.querySelectorAll('.tapiz input[type="text"]');
+            let datos = [];
+            let correcto = true;
+
+            inputs.forEach(input => {
+                datos.push(input.value);
+            });
+
+            datos.forEach(dato => {
+                let num = Number(dato);
+                if (!Number.isInteger(num) || num <= 1) {
+                    correcto = false;
+                }
+            });
+
+            if (!correcto) {
+                contenedor.innerHTML = '<p style="color: red;">⚠️ Alguno de los valores introducidos no es un número entero mayor que 1</p><br>';
+                contenedor.insertAdjacentHTML('beforeend','<a href="index.html"><button type="button" style="margin: 0;">Volver al formulario</button></a>')
+
+            } else {
+                contenedor.submit();
+            }
+        }
+
+        let slider = document.querySelector("#slider")
+        let tapiz = document.querySelector(".tapiz")
+        let formulario = document.querySelector(".form_container")
+        slider.addEventListener("input", valores)
+
+        function valores() {
+            console.log(slider.value)
+            formulario.innerHTML = ""
+
+            for (i = 0; i < slider.value; i++) {
+                let input = document.createElement("div")
+                input.classList.add("row", "inputs_numeros")
+                input.innerHTML = `
+                    <label>Nº ${i+1}:</label>
+                    <input type="text" name="num[]" maxlength="6" placeholder="Introduzca un numero" required>
+                    `
+                formulario.appendChild(input)
+            }
+
+        }
+    </script>
+</body>
+</html>
